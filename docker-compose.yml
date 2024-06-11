@@ -1,0 +1,30 @@
+version: '2'
+services:
+  explorer:
+    build: explorer
+    restart: always
+    ports:
+      - 80:8080
+  block-metrics:
+    build: block-metrics
+    restart: always
+    ports:
+      - 3001:3000
+  logs:
+    image: amir20/dozzle:v5.8.1
+    restart: unless-stopped
+    environment:
+      - DOZZLE_BASE=/logs
+      - DOZZLE_PASSWORD=root
+      - DOZZLE_USERNAME=root
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    ports:
+      - 3002:8080
+  app:
+    build: liteserver
+    ports:
+      - 30303:30303/udp
+      - 3000:3000/tcp
+      - 3333:3333/tcp
+    restart: always
