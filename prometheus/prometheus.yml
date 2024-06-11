@@ -1,0 +1,11 @@
+scrape_configs:
+  - job_name: liteserver
+    scrape_interval: 5s
+    scrape_timeout: 5s
+    static_configs:
+    - targets: ['app:3000']
+  - job_name: block-metrics
+    scrape_interval: 5s
+    scrape_timeout: 5s
+    static_configs:
+    - targets: ['block-metrics:3000']

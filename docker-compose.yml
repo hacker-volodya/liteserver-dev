@@ -3,13 +3,12 @@ services:
   explorer:
     build: explorer
     restart: always
-    ports:
-      - 80:8080
+    labels:
+      - "traefik.http.routers.grafana.rule=Host(`explorer.liteserver.tech`)"
+      - "traefik.enable=true"
   block-metrics:
     build: block-metrics
     restart: always
-    ports:
-      - 3001:3000
   logs:
     image: amir20/dozzle:v5.8.1
     restart: unless-stopped
@@ -19,12 +18,43 @@ services:
       - DOZZLE_USERNAME=root
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-    ports:
-      - 3002:8080
+    labels:
+      - "traefik.http.routers.grafana.rule=Host(`logs.liteserver.tech`)"
+      - "traefik.enable=true"
+  prometheus:
+    build: prometheus
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+    volumes:
+      - prometheus_data:/prometheus
+    restart: always
+  grafana:
+    image: grafana/grafana
+    user: root
+    depends_on:
+      - prometheus
+    volumes:
+      - grafana_data:/var/lib/grafana
+    restart: always
+    environment:
+      - "GF_AUTH_ANONYMOUS_ENABLED=true"
+      - "GF_AUTH_ANONYMOUS_ORG_ROLE=Viewer"
+    labels:
+      - "traefik.http.routers.grafana.rule=Host(`grafana.liteserver.tech`)"
+      - "traefik.enable=true"
+  traefik:
+    build: traefik
+    network_mode: "host"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: always
   app:
     build: liteserver
     ports:
       - 30303:30303/udp
-      - 3000:3000/tcp
       - 3333:3333/tcp
     restart: always
+volumes:
+  grafana_data: {}
+  prometheus_data: {}

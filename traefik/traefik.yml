@@ -1,0 +1,7 @@
+providers:
+  docker:
+    exposedByDefault: false
+    defaultRule: "Host(`{{ trimPrefix `/` .Name }}.docker.localhost`)"
+entryPoints:
+  web:
+    address: ":80"
