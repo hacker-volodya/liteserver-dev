@@ -4,7 +4,7 @@ services:
     build: explorer
     restart: always
     labels:
-      - "traefik.http.routers.grafana.rule=Host(`explorer.liteserver.tech`)"
+      - "traefik.http.routers.explorer.rule=Host(`explorer.liteserver.tech`)"
       - "traefik.enable=true"
   block-metrics:
     build: block-metrics
@@ -19,7 +19,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     labels:
-      - "traefik.http.routers.grafana.rule=Host(`logs.liteserver.tech`)"
+      - "traefik.http.routers.logs.rule=Host(`logs.liteserver.tech`)"
       - "traefik.enable=true"
   prometheus:
     build: prometheus
