@@ -49,6 +49,15 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     restart: always
+  node_exporter:
+    image: quay.io/prometheus/node-exporter:latest
+    command:
+      - '--path.rootfs=/host'
+    network_mode: host
+    pid: host
+    restart: always
+    volumes:
+      - '/:/host:ro,rslave'
   app:
     build: liteserver
     ports:
