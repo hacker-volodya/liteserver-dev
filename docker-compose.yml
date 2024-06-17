@@ -58,12 +58,20 @@ services:
     restart: always
     volumes:
       - '/:/host:ro,rslave'
+  jaeger:
+    image: jaegertracing/all-in-one
+    labels:
+      - "traefik.http.routers.jaeger.rule=Host(`jaeger.liteserver.tech`)"
+      - "traefik.http.services.jaeger.loadbalancer.server.port=16686"
+      - "traefik.enable=true"
   app:
     build: liteserver
     ports:
       - 30303:30303/udp
       - 3333:3333/tcp
     restart: always
+    environment:
+     - JAEGER_AGENT_ENDPOINT=jaeger:6831
 volumes:
   grafana_data: {}
   prometheus_data: {}
