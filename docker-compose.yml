@@ -72,6 +72,22 @@ services:
     restart: always
     environment:
      - JAEGER_AGENT_ENDPOINT=jaeger:6831
+  toncenter:
+    build: toncenter
+    environment:
+      - TON_API_LOGS_LEVEL=DEBUG
+      - TON_API_TONLIB_LITESERVER_CONFIG=/global.config.json
+    restart: always
+    command: -c "gunicorn -k uvicorn.workers.UvicornWorker -w 16 --bind 0.0.0.0:8081 pyTON.main:app"
+    healthcheck:
+      test: curl -sS http://127.0.0.1:8081/healthcheck || echo 1
+      interval: 15s
+      timeout: 3s
+      retries: 12
+    labels:
+      - "traefik.http.routers.jaeger.rule=Host(`toncenter.liteserver.tech`)"
+      - "traefik.http.services.jaeger.loadbalancer.server.port=8081"
+      - "traefik.enable=true"
 volumes:
   grafana_data: {}
   prometheus_data: {}
