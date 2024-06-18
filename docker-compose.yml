@@ -65,11 +65,19 @@ services:
       - "traefik.http.services.jaeger.loadbalancer.server.port=16686"
       - "traefik.enable=true"
   app:
-    build: liteserver
+    build:
+      context: liteserver
+      additional_contexts:
+        config: ./config
+      dockerfile_inline: |
+        # syntax = devthefuture/dockerfile-x
+        INCLUDE Dockerfile
+        COPY --from=config /config.yml /config.yml
     ports:
       - 30303:30303/udp
       - 3333:3333/tcp
     restart: always
+    command: ["-c", "/config.yml"]
     environment:
      - JAEGER_AGENT_ENDPOINT=jaeger:6831
   toncenter:

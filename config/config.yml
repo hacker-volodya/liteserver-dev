@@ -1,8 +1,8 @@
 indexer:
   ip_address: 0.0.0.0:30303
   adnl_keys:
-    dht_key: "0092a775abde7539ff5fab97ac32ff44eb3bc3711c9136ef3a96be8e290df1ff"
-    overlay_key: "f0db73bee16dffb5372540a50a7edffc11e1527e5f6194579ec9fff3f89be2ff"
+    dht_key: "0092a775abde7539ff6fab97ac32ff44eb3bc3711c9136ef3a96be8e290df1ff"
+    overlay_key: "f0db73bee16dffc5372540a50a7edffc11e1527e5f6194579ec9fff3f89be2ff"
   rocks_db_path: /data/rocksdb
   file_db_path: /data/file
   state_gc_options: null
@@ -31,7 +31,7 @@ indexer:
       type: ignore
       # type: sync
       # from_seqno: 100
-    parallel_archive_downloads: 1
+    parallel_archive_downloads: 32
     save_to_disk_threshold: 1073741824
     max_block_applier_depth: 32
     force_use_get_next_block: false  # Ignore archives
@@ -40,12 +40,12 @@ indexer:
     persistent_state_parallelism: 1
     remove_old_states: true
   adnl_options:
-    query_min_timeout_ms: 5000  # Minimal ADNL query timeout. Will override the used timeout if it is less.
-    query_default_timeout_ms: 5000  # Default ADNL query timeout. Will be used if no timeout is specified.
-    transfer_timeout_sec: 3  # ADNL multipart transfer timeout. It will drop the transfer if it is not completed within this timeout.
+    query_min_timeout_ms: 100  # Minimal ADNL query timeout. Will override the used timeout if it is less.
+    query_default_timeout_ms: 1000  # Default ADNL query timeout. Will be used if no timeout is specified.
+    transfer_timeout_sec: 2  # ADNL multipart transfer timeout. It will drop the transfer if it is not completed within this timeout.
     clock_tolerance_sec: 60  # Permissible time difference between remote and local clocks.
-    channel_reset_timeout_sec: 30  # Drop channels which had no response for this amount of time.
-    address_list_timeout_sec: 5000  # How much time address lists from packets should be valid.
+    channel_reset_timeout_sec: 10  # Drop channels which had no response for this amount of time.
+    address_list_timeout_sec: 30  # How much time address lists from packets should be valid.
     packet_history_enabled: false  # Whether to add additional duplicated packets check.
     packet_signature_required: true  # Whether handshake packets signature is mandatory.
     force_use_priority_channels: false  # Whether to use priority channels for queries.
@@ -54,9 +54,9 @@ indexer:
   rldp_options:
     max_answer_size: 10485760  # Max allowed RLDP answer size in bytes. Query will be rejected if answer is bigger.
     max_peer_queries: 16  # Max parallel RLDP queries per peer.
-    query_min_timeout_ms: 5000  # Min RLDP query timeout.
-    query_max_timeout_ms: 10000  # Max RLDP query timeout
-    query_wave_len: 10  # Number of FEC messages to send in group. There will be a short delay between them.
+    query_min_timeout_ms: 100  # Min RLDP query timeout.
+    query_max_timeout_ms: 100000  # Max RLDP query timeout
+    query_wave_len: 3  # Number of FEC messages to send in group. There will be a short delay between them.
     query_wave_interval_ms: 10  # Interval between FEC broadcast waves.
     force_compression: false  # Whether requests will be compressed.
   dht_options:
@@ -77,18 +77,18 @@ indexer:
     broadcast_target_count: 5  # Max number of peers to distribute broadcast to.
     secondary_broadcast_target_count: 3  # Max number of peers to redistribute ordinary broadcast to.
     secondary_fec_broadcast_target_count: 3  # Max number of peers to redistribute FEC broadcast to.
-    fec_broadcast_wave_len: 20  # Number of FEC messages to send in group. There will be a short delay between them.
+    fec_broadcast_wave_len: 1  # Number of FEC messages to send in group. There will be a short delay between them.
     fec_broadcast_wave_interval_ms: 10  # Interval between FEC broadcast waves.
     broadcast_timeout_sec: 60  # Overlay broadcast timeout. It will be forcefully dropped if not received in this time.
     force_compression: false  # Whether requests will be compressed.
   neighbours_options:
-    max_neighbours: 50
+    max_neighbours: 200
     reloading_min_interval_sec: 10
     reloading_max_interval_sec: 30
-    ping_interval_ms: 500
+    ping_interval_ms: 5000
     search_interval_ms: 1000
     ping_min_timeout_ms: 10
-    ping_max_timeout_ms: 1000
-    default_rldp_roundtrip_ms: 2000
+    ping_max_timeout_ms: 300
+    default_rldp_roundtrip_ms: 300
     max_ping_tasks: 6
     max_exchange_tasks: 6
