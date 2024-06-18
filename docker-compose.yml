@@ -93,8 +93,8 @@ services:
       timeout: 3s
       retries: 12
     labels:
-      - "traefik.http.routers.jaeger.rule=Host(`toncenter.liteserver.tech`)"
-      - "traefik.http.services.jaeger.loadbalancer.server.port=8081"
+      - "traefik.http.routers.toncenter.rule=Host(`toncenter.liteserver.tech`)"
+      - "traefik.http.services.toncenter.loadbalancer.server.port=8081"
       - "traefik.enable=true"
 volumes:
   grafana_data: {}
