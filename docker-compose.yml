@@ -71,7 +71,7 @@ services:
         config: ./config
       dockerfile_inline: |
         # syntax = devthefuture/dockerfile-x
-        INCLUDE Dockerfile
+        FROM ./Dockerfile
         COPY --from=config /config.yml /config.yml
     ports:
       - 30303:30303/udp
