@@ -96,6 +96,18 @@ services:
       - "traefik.http.routers.toncenter.rule=Host(`toncenter.liteserver.tech`)"
       - "traefik.http.services.toncenter.loadbalancer.server.port=8081"
       - "traefik.enable=true"
+  api-v4:
+    image: tonwhales/ton-api-v4:v38
+    labels:
+      - "traefik.http.routers.apiv4.rule=Host(`api-v4.liteserver.tech`)"
+      - "traefik.http.services.apiv4.loadbalancer.server.port=3000"
+      - "traefik.enable=true"
+    environment:
+      - TON_CONFIG=http://config-server:8000/global.config.json
+    restart: always
+  config-server:
+    build: config-server
+    restart: always
 volumes:
   grafana_data: {}
   prometheus_data: {}
