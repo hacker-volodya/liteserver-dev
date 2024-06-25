@@ -69,10 +69,7 @@ services:
       context: liteserver
       additional_contexts:
         config: ./config
-      dockerfile_inline: |
-        # syntax = devthefuture/dockerfile-x
-        FROM ./Dockerfile
-        COPY --from=config /config.yml /config.yml
+      dockerfile: ../config/configurer.dockerfile
     ports:
       - 30303:30303/udp
       - 3333:3333/tcp
