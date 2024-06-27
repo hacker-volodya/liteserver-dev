@@ -1,0 +1,3 @@
+[submodule "liteserver"]
+	path = liteserver
+	url = git@github.com:hacker-volodya/liteserver.git
