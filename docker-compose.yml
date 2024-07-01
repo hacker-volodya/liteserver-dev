@@ -60,6 +60,7 @@ services:
       - '/:/host:ro,rslave'
   jaeger:
     image: jaegertracing/all-in-one
+    restart: always
     labels:
       - "traefik.http.routers.jaeger.rule=Host(`jaeger.liteserver.tech`)"
       - "traefik.http.services.jaeger.loadbalancer.server.port=16686"
