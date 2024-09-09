@@ -9,8 +9,7 @@ indexer:
     kind: before_previous_key_block
     enable_for_sync: true  # Whether to enable blocks GC during sync.
     max_blocks_per_batch: 100000  # Max `WriteBatch` entries before apply
-  shard_state_cache_options:
-    ttl_sec: 120  # LRU cache item duration.
+  shard_state_cache_options: null
   db_options:
     rocksdb_lru_capacity: 8 GB
     cells_cache_size: 8 GB
@@ -28,8 +27,8 @@ indexer:
       type: ignore
       # type: sync
       # from_seqno: 100
-    parallel_archive_downloads: 32
-    save_to_disk_threshold: 1073741824
+    parallel_archive_downloads: 8
+    save_to_disk_threshold: 104857600
     max_block_applier_depth: 32
     force_use_get_next_block: false  # Ignore archives
   persistent_state_options:
@@ -37,8 +36,8 @@ indexer:
     persistent_state_parallelism: 1
     remove_old_states: true
   adnl_options:
-    query_min_timeout_ms: 100  # Minimal ADNL query timeout. Will override the used timeout if it is less.
-    query_default_timeout_ms: 1000  # Default ADNL query timeout. Will be used if no timeout is specified.
+    query_min_timeout_ms: 1000  # Minimal ADNL query timeout. Will override the used timeout if it is less.
+    query_default_timeout_ms: 10000  # Default ADNL query timeout. Will be used if no timeout is specified.
     transfer_timeout_sec: 2  # ADNL multipart transfer timeout. It will drop the transfer if it is not completed within this timeout.
     clock_tolerance_sec: 60  # Permissible time difference between remote and local clocks.
     channel_reset_timeout_sec: 10  # Drop channels which had no response for this amount of time.
@@ -51,7 +50,7 @@ indexer:
   rldp_options:
     max_answer_size: 10485760  # Max allowed RLDP answer size in bytes. Query will be rejected if answer is bigger.
     max_peer_queries: 16  # Max parallel RLDP queries per peer.
-    query_min_timeout_ms: 100  # Min RLDP query timeout.
+    query_min_timeout_ms: 5000  # Min RLDP query timeout.
     query_max_timeout_ms: 100000  # Max RLDP query timeout
     query_wave_len: 3  # Number of FEC messages to send in group. There will be a short delay between them.
     query_wave_interval_ms: 10  # Interval between FEC broadcast waves.
