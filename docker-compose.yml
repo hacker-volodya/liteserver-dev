@@ -77,11 +77,13 @@ services:
     restart: always
     command: ["-c", "/config.yml"]
     environment:
-     - JAEGER_AGENT_ENDPOINT=jaeger:6831
+      - RUST_BACKTRACE=1
+      - RUST_LOG=info
+    #№ - JAEGER_AGENT_ENDPOINT=jaeger:6831
   toncenter:
     build: toncenter
     environment:
-      - TON_API_LOGS_LEVEL=DEBUG
+      - TON_API_LOGS_LEVEL=INFO
       - TON_API_TONLIB_LITESERVER_CONFIG=/global.config.json
     restart: always
     command: -c "gunicorn -k uvicorn.workers.UvicornWorker -w 16 --bind 0.0.0.0:8081 pyTON.main:app"
